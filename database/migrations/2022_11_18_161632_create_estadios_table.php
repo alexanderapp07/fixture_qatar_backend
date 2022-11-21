@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('estadios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 50);
-            $table->bigInteger('capacidad');    // 60000 - 90000
+            $table->string('capacidad');    // 60000 - 90000
             $table->timestamps();
         });
     }

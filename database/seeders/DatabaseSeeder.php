@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Confederacion;
+use App\Models\TipoEstadistica;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,5 +23,15 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        
+        $this->call([
+            ConfederacionSeeder::class,
+            EntrenadorSeeder::class,
+            EstadioSeeder::class,
+            PaisSeeder::class,
+            JugadorSeeder::class,
+            TipoEstadisticaSeeder::class,
+            UserSeeder::class
+        ]);
     }
 }

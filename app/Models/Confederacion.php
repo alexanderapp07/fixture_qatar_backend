@@ -10,6 +10,8 @@ class Confederacion extends Model
 {
     use HasFactory;
 
+    protected $table = 'confederaciones';
+
     public function paises() {
         return $this->hasMany(Pais::class);
     }

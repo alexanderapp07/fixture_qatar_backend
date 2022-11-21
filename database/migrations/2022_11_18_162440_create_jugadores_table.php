@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('nombre', 25);
             $table->string('apellido', 25);
             $table->string('posicion', 25);
-            $table->string('club', 25);
+            $table->integer('edad');
+            $table->string('club', 100);
 
             // Relación con tabla paises
             $table->bigInteger('pais_id')->unsigned();
