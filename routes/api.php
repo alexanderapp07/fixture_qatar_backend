@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConfederacionController;
+use App\Http\Controllers\EstadisticaController;
 use App\Models\Confederacion;
 
 /*
@@ -22,3 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::apiResource('confederaciones', ConfederacionController::class);
+
+Route::apiResource('estadisticas', EstadisticaController::class);
+//Route::post('estadisticas', [EstadisticaController::class, 'create']);
