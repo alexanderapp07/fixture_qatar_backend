@@ -4,6 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConfederacionController;
 use App\Models\Confederacion;
+use App\Models\Estadio;
+use App\Http\Controllers\EstadioController;
+use App\Models\User;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::apiResource('confederaciones', ConfederacionController::class);
+Route::apiResource('estadios', EstadioController::class);
+Route::apiResource('users', UserController::class);
+Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/login', [AuthController::class, 'loginUser']);
