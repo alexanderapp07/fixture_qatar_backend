@@ -9,6 +9,18 @@ class Partido extends Model
 {
     use HasFactory;
 
+    protected $table = 'partidos';
+
+    protected $fillable = [
+        'fecha',
+        'hora'
+    ];
+
+    protected $casts = [
+        'fecha' => 'date:d/m/Y',
+        'hora' => 'time:hh:mm'
+    ];
+
     public function estadio() {
         return $this->belongsTo(Estadio::class);
     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TipoEstadisticaSeeder extends Seeder
+class RolSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,13 +15,12 @@ class TipoEstadisticaSeeder extends Seeder
      */
     public function run()
     {
-        DB::insert("
-            INSERT INTO tipo_estadisticas(nombre) VALUES
-            ('GOL'),
-            ('ASISTENCIA'),
-            ('MVP'),
-            ('AMARILLA'),
-            ('ROJA');
-        ");
+        DB::table('roles')->insert([
+            'nombre' => 'admin',            
+        ]);
+
+        DB::table('roles')->insert([
+            'nombre' => 'aficionado'
+        ]);
     }
 }

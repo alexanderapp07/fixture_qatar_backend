@@ -7,6 +7,7 @@ use App\Models\Jugador;
 use App\Models\Partido;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EstadisticaController extends Controller
 {
@@ -61,10 +62,9 @@ class EstadisticaController extends Controller
     {
         $estadisticas = new Estadistica();
         try{
-            $tEstadistica = TipoEstadistica::findOrFail($request->tipo_estadistica_id);
             $partido = Partido::findOrFail($request->partido_id);
             //$jugador = Jugador::findOrFail($request->jugador_id);
-            $estadisticas->tipo_estadistica_id = $request->tipo_estadistica_id;
+            $estadisticas->nombre = $request->nombre;
             $estadisticas->partido_id = $request->partido_id;
             $estadisticas->jugador_id = $request->jugador_id;
             $estadisticas->save();
@@ -129,5 +129,46 @@ class EstadisticaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function maximosGoleadores() {
+        /*
+        select j.nombre, j.apellido, p.nombre, e.nombre, count(e.nombre) cantidad from qatar.jugadores j
+        inner join qatar.paises p
+        inner join qatar.estadisticas e
+        on j.pais_id = p.id and e.jugador_id = j.id
+        group by j.nombre, j.apellido, p.nombre, e.nombre
+        having e.nombre = 'GOL'
+        order by cantidad desc;
+        */
+        $goleadores = DB::table('jugadores as j')
+                        ->join('paises as p', 'j.pais_id', '=', 'p.id')
+                        ->join('estadisticas as e', 'e.jugador_id', '=', 'j.id')
+                        ->select('j.nombre', 'j.apellido', 'p.nombre as pais', 'e.nombre as tipo', DB::raw('count(e.nombre) as cantidad'))
+                        ->groupBy('j.nombre', 'j.apellido', 'p.nombre', 'e.nombre')
+                        ->having('e.nombre', '=', 'GOL')
+                        ->orderBy('cantidad', 'desc')
+                        ->get();
+        
+        return response()->json([
+            'status' => true, 
+            'goleadores' => $goleadores
+        ]);
+    }
+
+    public function maximosAsistidores() {
+        $asistidores = DB::table('jugadores as j')
+                        ->join('paises as p', 'j.pais_id', '=', 'p.id')
+                        ->join('estadisticas as e', 'e.jugador_id', '=', 'j.id')
+                        ->select('j.nombre', 'j.apellido', 'p.nombre as pais', 'e.nombre as tipo', DB::raw('count(e.nombre) as cantidad'))
+                        ->groupBy('j.nombre', 'j.apellido', 'p.nombre', 'e.nombre')
+                        ->having('e.nombre', '=', 'ASISTENCIA')
+                        ->orderBy('cantidad', 'desc')
+                        ->get();
+        
+        return response()->json([
+            'status' => true, 
+            'asistidores' => $asistidores
+        ]);
     }
 }

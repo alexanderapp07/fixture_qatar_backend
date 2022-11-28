@@ -12,6 +12,8 @@ class Pais extends Model
 {
     use HasFactory;
 
+    protected $table = 'paises';
+
     public function confederacion() {
         return $this->belongsTo(Confederacion::class);
     }
@@ -26,5 +28,9 @@ class Pais extends Model
 
     public function partidos() {
         return $this->hasMany(Partido::class);
+    }
+
+    public function favoritos() {
+        return $this->belongsToMany(Pais::class);
     }
 }

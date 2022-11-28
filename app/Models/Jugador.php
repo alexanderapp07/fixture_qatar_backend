@@ -11,6 +11,8 @@ class Jugador extends Model
 {
     use HasFactory;
 
+    protected $table = 'jugadores';
+
     public function pais() {
         return $this->belongsTo(Pais::class);
     }

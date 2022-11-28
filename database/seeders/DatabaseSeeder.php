@@ -30,8 +30,10 @@ class DatabaseSeeder extends Seeder
             EstadioSeeder::class,
             PaisSeeder::class,
             JugadorSeeder::class,
-            TipoEstadisticaSeeder::class,
-            UserSeeder::class
+            RolSeeder::class,
+            UserSeeder::class,
+            PartidoSeeder::class,
+            EstadisticaSeeder::class
         ]);
     }
 }

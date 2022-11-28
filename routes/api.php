@@ -10,6 +10,9 @@ use App\Http\Controllers\EstadioController;
 use App\Models\User;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\EntrenadorController;
+use App\Http\Controllers\PerfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +33,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('confederaciones', ConfederacionController::class);
 Route::apiResource('estadios', EstadioController::class);
 Route::apiResource('users', UserController::class);
+Route::apiResource('entrenadores', EntrenadorController::class);
+Route::apiResource('perfiles', PerfilController::class);
+Route::get('/calendario', [CalendarioController::class, 'index']);
+Route::get('/maximos-goleadores', [EstadisticaController::class, 'maximosGoleadores']);
+Route::get('/maximos-asistidores', [EstadisticaController::class, 'maximosAsistidores']);
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 

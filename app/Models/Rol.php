@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Estadistica;
 
-class TipoEstadistica extends Model
+class Rol extends Model
 {
     use HasFactory;
 
-    public function estadisticas() {
-        return $this->hasMany(Estadistica::class);
+    protected $table = 'roles';
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

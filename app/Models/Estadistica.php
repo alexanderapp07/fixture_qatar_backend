@@ -12,12 +12,10 @@ class Estadistica extends Model
 {
     use HasFactory;
 
+    protected $table = 'estadisticas';
+
     public function jugador() {
         return $this->belongsTo(Jugador::class);
-    }
-
-    public function tipo_estadistica() {
-        return $this->belongsTo(TipoEstadistica::class);
     }
 
     public function partido() {

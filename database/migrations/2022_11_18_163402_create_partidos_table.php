@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('partidos', function (Blueprint $table) {
             $table->id();
-            $table->string('fecha'); // cambiar en BD este campo para utilizarlo como string (dd/mm/yyyy)
-            $table->string('hora'); // 1cambiar en BD este campo para utilizarlo como string (HH:mm)
+            $table->date('fecha')->format('dd/mm/yyyy'); // cambiar en BD este campo para utilizarlo como string (dd/mm/yyyy)
+            $table->time('hora')->format('HH:mm'); // 1cambiar en BD este campo para utilizarlo como string (HH:mm)
 
             // Relación con tabla paises
             $table->bigInteger('local_pais_id')->unsigned();

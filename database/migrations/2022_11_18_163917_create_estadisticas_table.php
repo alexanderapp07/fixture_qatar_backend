@@ -15,10 +15,7 @@ return new class extends Migration
     {
         Schema::create('estadisticas', function (Blueprint $table) {
             $table->id();
-
-            // Relación con tabla tipos_estadisticas
-            $table->bigInteger('tipo_estadistica_id')->unsigned();
-            $table->foreign('tipo_estadistica_id')->references('id')->on('tipo_estadisticas')->onDelete('restrict');
+            $table->string('nombre', 15);
 
             // Relación con tabla Partido
             $table->bigInteger('partido_id')->unsigned();

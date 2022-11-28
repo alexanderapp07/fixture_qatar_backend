@@ -10,6 +10,8 @@ class Entrenador extends Model
 {
     use HasFactory;
 
+    protected $table = 'entrenadores';
+
     public function pais() {
         return $this->belongsTo(Pais::class);
     }
