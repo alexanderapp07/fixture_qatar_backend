@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\EntrenadorController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\TablaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,12 +36,11 @@ Route::apiResource('estadios', EstadioController::class);
 Route::apiResource('users', UserController::class);
 Route::apiResource('entrenadores', EntrenadorController::class);
 Route::apiResource('perfiles', PerfilController::class);
+Route::apiResource('estadisticas', EstadisticaController::class);
 Route::get('/calendario', [CalendarioController::class, 'index']);
 Route::get('/maximos-goleadores', [EstadisticaController::class, 'maximosGoleadores']);
 Route::get('/maximos-asistidores', [EstadisticaController::class, 'maximosAsistidores']);
+Route::get('/tabla-posiciones', [TablaController::class, 'ordenarTablas']);
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
-
-
-Route::apiResource('estadisticas', EstadisticaController::class);
 //Route::post('estadisticas', [EstadisticaController::class, 'create']);
