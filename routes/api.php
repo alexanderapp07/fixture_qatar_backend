@@ -14,6 +14,8 @@ use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\EntrenadorController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TablaController;
+use App\Http\Controllers\JugadorController;
+use App\Http\Controllers\PartidoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +38,6 @@ Route::apiResource('estadios', EstadioController::class);
 Route::apiResource('users', UserController::class);
 Route::apiResource('entrenadores', EntrenadorController::class);
 Route::apiResource('perfiles', PerfilController::class);
-Route::apiResource('estadisticas', EstadisticaController::class);
 Route::get('/calendario', [CalendarioController::class, 'index']);
 Route::get('/maximos-goleadores', [EstadisticaController::class, 'maximosGoleadores']);
 Route::get('/maximos-asistidores', [EstadisticaController::class, 'maximosAsistidores']);
