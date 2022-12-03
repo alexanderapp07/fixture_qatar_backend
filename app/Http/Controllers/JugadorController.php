@@ -54,11 +54,11 @@ class JugadorController extends Controller
 
     public function show($id)
     {
-        $jugador = Jugador::findOrFail($id);
+        $jugadores = Jugador::findOrFail($id);
 
         return response()->json([
             'status' => true,
-            'jugador' => $jugador
+            'jugadores' => $jugadores
         ]);
     }
 

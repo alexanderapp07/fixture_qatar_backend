@@ -38,6 +38,8 @@ Route::apiResource('estadios', EstadioController::class);
 Route::apiResource('users', UserController::class);
 Route::apiResource('entrenadores', EntrenadorController::class);
 Route::apiResource('perfiles', PerfilController::class);
+Route::apiResource('jugadores',JugadorController::class);
+Route::apiResource('partidos',PartidoController::class);
 Route::get('/calendario', [CalendarioController::class, 'index']);
 Route::get('/maximos-goleadores', [EstadisticaController::class, 'maximosGoleadores']);
 Route::get('/maximos-asistidores', [EstadisticaController::class, 'maximosAsistidores']);
