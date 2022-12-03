@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Use;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +24,6 @@ class AuthController extends Controller
             [
                 'nombre' => 'required',
                 'apellido' => 'required',
-                'nickname' => 'required|unique:users',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
             ]);
@@ -41,7 +39,6 @@ class AuthController extends Controller
             $user = User::create([
                 'nombre' => $request->nombre,
                 'apellido' => $request->apellido,
-                'nickname' => $request->nickname,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'rol_id' => 2
@@ -89,13 +86,21 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $user = User::where('email', $request->email)->first();
+            if(Auth::attempt($request->only(['email', 'password']))) {
+                $user = User::where('email', $request->email)->first();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Usario logeado correctamente',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
-            ], 200);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Usario logeado correctamente',
+                    'token' => $user->createToken("API TOKEN")->plainTextToken,
+                    'user' => $user
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No autorizado'
+                ], 401);
+            }
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -103,6 +108,45 @@ class AuthController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * success response method.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendResponse($result, $message)
+    {
+    	$response = [
+            'success' => true,
+            'data'    => $result,
+            'message' => $message,
+        ];
+
+
+        return response()->json($response, 200);
+    }
+
+
+    /**
+     * return error response.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendError($error, $errorMessages = [], $code = 404)
+    {
+        $response = [
+            'success' => false,
+            'message' => $error,
+        ];
+
+
+        if(!empty($errorMessages)){
+            $response['data'] = $errorMessages;
+        }
+
+
+        return response()->json($response, $code);
     }
 
 }

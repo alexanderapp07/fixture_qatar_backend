@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Estadistica;
 use App\Models\TipoEstadistica;
 use App\Models\Jugador;
+use App\Models\Pais;
 use App\Models\Partido;
 use Exception;
 use Illuminate\Http\Request;
@@ -148,6 +149,7 @@ class EstadisticaController extends Controller
                         ->groupBy('j.nombre', 'j.apellido', 'p.nombre', 'e.nombre')
                         ->having('e.nombre', '=', 'GOL')
                         ->orderBy('cantidad', 'desc')
+                        ->take(5)
                         ->get();
         
         return response()->json([
@@ -164,11 +166,120 @@ class EstadisticaController extends Controller
                         ->groupBy('j.nombre', 'j.apellido', 'p.nombre', 'e.nombre')
                         ->having('e.nombre', '=', 'ASISTENCIA')
                         ->orderBy('cantidad', 'desc')
+                        ->take(5)
                         ->get();
         
         return response()->json([
             'status' => true, 
             'asistidores' => $asistidores
+        ]);
+    }
+
+    public function resultados() {
+        $goles_partidos = [];
+
+        for($i = 0; $i < 32; $i++) { // $i < 48
+            $partido = Partido::findOrFail($i + 1);
+
+            $query = DB::table('partidos as a')
+            ->join('paises as b', 'a.local_pais_id', '=', 'b.id')
+            ->join('paises as c', 'a.visita_pais_id', '=', 'c.id')
+            ->join('estadisticas as d', 'a.id', '=', 'd.partido_id')
+            ->join('jugadores as e', 'd.jugador_id', 'e.id')
+            ->join('paises as f', 'e.pais_id', '=', 'f.id')
+            ->select('a.fecha', 'a.hora', 'a.id', 'd.nombre as tipo', 'b.nombre as local', 'c.nombre as visita', DB::raw('count(e.pais_id) as goles'), 'f.nombre')
+            ->groupBy('d.nombre', 'b.nombre', 'c.nombre', 'e.pais_id', 'a.id', 'a.fecha', 'a.hora')
+            ->havingRaw('d.nombre = "GOL" and a.id = ' . $partido->id . '')
+            ->orderByRaw('a.fecha desc, a.hora desc')
+            ->get();
+
+            if(count($query)==0) {
+                $local = Pais::findOrFail($partido->local_pais_id);
+                $visita = Pais::findOrFail($partido->visita_pais_id);
+                $partido = DB::table('partidos as p')
+                            ->select('p.fecha', 'p.hora')
+                            ->whereRaw('local_pais_id = ' . $local->id . ' and visita_pais_id = ' . $visita->id)
+                            ->get();
+                
+                array_push($goles_partidos, [
+                    "local" => $local->nombre,
+                    "visita" => $visita->nombre,
+                    "goles_local" => 0,
+                    "goles_visita" => 0,
+                    "fecha" => $partido[0]->fecha,
+                    "hora" => $partido[0]->hora
+                    //"puntos_local" => 1,
+                    //"puntos_visita" => 1
+                ]);
+            } else if(count($query) == 1) {
+                $item = $query->first();
+
+                $goles_local = 0;
+                $goles_visita = 0;
+                $puntos_local = 0;
+                $puntos_visita = 0;
+
+                /*if($item->local == $item->nombre) {
+                    $goles_local = $item->goles;
+                }
+
+                if($item->visita == $item->nombre) {
+                    $goles_visita = $item->goles;
+                }
+
+                if($goles_local > $goles_visita) {
+                    $puntos_local = 3;
+                } else if($goles_local < $goles_visita) {
+                    $puntos_visita = 3;
+                } else if($goles_local == $goles_visita) {
+                    $puntos_local = 1;
+                    $puntos_visita = 1;
+                }*/
+
+                array_push($goles_partidos, [
+                    "local" => $item->local,
+                    "visita" => $item->visita,
+                    "goles_local" => $goles_local,
+                    "goles_visita" => $goles_visita,
+                    "fecha" => $item->fecha,
+                    "hora" => $item->hora
+                    //"puntos_local" => $puntos_local,
+                    //"puntos_visita" => $puntos_visita
+                ]);
+
+            } else if(count($query) == 2) {
+                $primero = $query[0];
+                $segundo = $query[1];
+                $goles_local = $primero->goles;
+                $goles_visita = $segundo->goles;
+                $puntos_local = 0;
+                $puntos_visita = 0;
+
+                /*if($goles_local > $goles_visita) {
+                    $puntos_local = 3;
+                } else if($goles_local < $goles_visita) {
+                    $puntos_visita = 3;
+                } else if($goles_local == $goles_visita) {
+                    $puntos_local = 1;
+                    $puntos_visita = 1;
+                }*/
+
+                array_push($goles_partidos, [
+                    "local" => $primero->nombre,
+                    "visita" => $segundo->nombre,
+                    "goles_local" => $goles_local,
+                    "goles_visita" => $goles_visita,
+                    "fecha" => $primero->fecha,
+                    "hora" => $primero->hora
+                    //"puntos_local" => $puntos_local,
+                    //"puntos_visita" => $puntos_visita
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => true, 
+            'resultados' => $goles_partidos
         ]);
     }
 }

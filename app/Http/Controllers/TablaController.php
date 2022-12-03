@@ -86,7 +86,7 @@ class TablaController extends Controller
         $goles_partidos = [];
         $puntos = [];
 
-        for($i = 0; $i < 12; $i++) { // $i < 48
+        for($i = 0; $i < 32; $i++) { // $i < 48
             $partido = Partido::findOrFail($i + 1);
 
             $query = DB::table('partidos as a')

@@ -8,7 +8,8 @@ use App\Models\Pais;
 use App\Models\Estadio;
 use App\Models\Estadistica;
 use App\Models\Arbitro;
-use App\Http\Controllers\PartidoController;
+use App\Models\Jugador;
+use Exception;
 
 class PartidoController extends Controller
 {

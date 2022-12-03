@@ -248,7 +248,7 @@ class JugadorSeeder extends Seeder
             ('Julián', 'Álvarez', 'Delantero', 22, 'Manchester City', 9),
             ('Joaquín', 'Correa', 'Delantero', 28, 'Inter', 9),
             ('Lautaro', 'Martínez', 'Delantero', 25, 'Inter', 9),
-            ('Liones', 'Messi', 'Delantero', 35, 'Paris Saint-Germain', 9),
+            ('Lionel', 'Messi', 'Delantero', 35, 'Paris Saint-Germain', 9),
             ('Paulo', 'Dybala', 'Delantero', 29, 'Roma', 9),
             ('Mohammed', 'Al-Owais', 'Portero', 31, 'Al-Hilal', 10),
             ('Mohammed', 'Al Rubaei', 'Portero', 25, 'Al-Hilal', 10),
