@@ -86,7 +86,7 @@ class TablaController extends Controller
         $goles_partidos = [];
         $puntos = [];
 
-        for($i = 0; $i < 32; $i++) { // $i < 48
+        for($i = 0; $i < 48; $i++) { // $i < 48
             $partido = Partido::findOrFail($i + 1);
 
             $query = DB::table('partidos as a')
@@ -177,19 +177,28 @@ class TablaController extends Controller
         for($i = 0; $i < 32; $i++) {
             $pais = Pais::findOrFail($i + 1);
             $puntos_pais = 0;
+            $goles_favor = 0;
+            $goles_contra = 0;
 
             for($j = 0; $j < count($goles_partidos); $j++) {
                 if($pais->nombre == $goles_partidos[$j]['local']) {
                     $puntos_pais += $goles_partidos[$j]['puntos_local'];
+                    $goles_favor += $goles_partidos[$j]['goles_local'];
+                    $goles_contra += $goles_partidos[$j]['goles_visita'];
                 }
 
                 if($pais->nombre == $goles_partidos[$j]['visita']) {
                     $puntos_pais += $goles_partidos[$j]['puntos_visita'];
+                    $goles_favor += $goles_partidos[$j]['goles_visita'];
+                    $goles_contra += $goles_partidos[$j]['goles_local'];
                 }
             }
 
             array_push($puntos, [
                 "nombre" => $pais->nombre,
+                "golesFavor" => $goles_favor,
+                "golesContra" => $goles_contra,
+                "diferenciaGoles" => $goles_favor - $goles_contra,
                 "puntos" => $puntos_pais
             ]);
         }
@@ -197,30 +206,8 @@ class TablaController extends Controller
         return $puntos;
     }
 
-    public function tablaPosiciones() {
-        $golesContra = $this->golesEnContra();
-        $golesFavor = $this->golesFavor();
-        $puntos = $this->puntosPorPais();
-
-        //dd($golesFavor[0]["nombre"] . ' ' . $golesFavor[0]["cantidad"]);
-        $tablas = [];
-
-        for($i = 0; $i < 32; $i++) {
-            array_push($tablas, [
-                "nombre" => $golesContra[$i]["nombre"],
-                "golesFavor" => $golesFavor[$i]["cantidad"],
-                "golesContra" => $golesContra[$i]["cantidad"],
-                "diferenciaGoles" => $golesFavor[$i]["cantidad"] - $golesContra[$i]["cantidad"],
-                "puntos" => $puntos[$i]["puntos"]
-            ]);
-        }
-
-        //dd($tablas);
-        return $tablas;
-    }
-
     public function ordenarTablas() {
-        $tablas = $this->tablaPosiciones();
+        $tablas = $this->puntosPorPais();
 
         for($k = 4; $k < 33; $k += 4) {
             $inicio_i = $k - 1;
@@ -240,6 +227,12 @@ class TablaController extends Controller
                             $temp = $tablas[$j + 1];
                             $tablas[$j + 1] = $tablas[$j];
                             $tablas[$j] = $temp;
+                        } else if($tablas[$j]['diferenciaGoles'] == $tablas[$j + 1]['diferenciaGoles']) {
+                            if($tablas[$j]['golesFavor'] < $tablas[$j + 1]['golesFavor']) {
+                                $temp = $tablas[$j + 1];
+                                $tablas[$j + 1] = $tablas[$j];
+                                $tablas[$j] = $temp;
+                            }
                         }
                     }
                 }
