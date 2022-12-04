@@ -40,6 +40,8 @@ Route::apiResource('users', UserController::class)->middleware('auth:sanctum');
 Route::apiResource('entrenadores', EntrenadorController::class);
 Route::apiResource('perfiles', PerfilController::class)->middleware('auth:sanctum');
 Route::apiResource('paises', PaisController::class);
+Route::apiResource('jugadores',JugadorController::class);
+Route::apiResource('partidos',PartidoController::class);
 Route::get('/calendario', [CalendarioController::class, 'index']);
 Route::get('/maximos-goleadores', [EstadisticaController::class, 'maximosGoleadores']);
 Route::get('/maximos-asistidores', [EstadisticaController::class, 'maximosAsistidores']);

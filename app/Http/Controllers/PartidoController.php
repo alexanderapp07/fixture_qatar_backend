@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use App\Models\Partido;
 use App\Models\Pais;
 use App\Models\Estadio;
@@ -33,7 +33,7 @@ class PartidoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($request)
+    /*public function create($request)
     {   
         $partidos= new Partido();
         try{
@@ -52,7 +52,7 @@ class PartidoController extends Controller
                 'partidos' => $e
             ]);
         }
-    }
+    }*/
 
     /**
      * Store a newly created resource in storage.
