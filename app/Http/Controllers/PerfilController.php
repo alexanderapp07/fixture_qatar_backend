@@ -64,7 +64,26 @@ class PerfilController extends Controller
      */
     public function show($id)
     {
-        //
+        $perfil = Perfil::findOrFail($id);
+
+        $favoritos = [];
+
+        for($i = 0; $i < count($perfil->favoritos); $i++) {
+            array_push($favoritos, $perfil->favoritos[$i]->id);
+        }
+
+        $array = [
+            "id" => $perfil->id,
+            "campeon_pais_id" => $perfil->campeon_pais_id,
+            "usuario_id" => $perfil->usuario_id,
+            "informacion" => $perfil->informacion,
+            "favoritos" => $favoritos
+        ];
+
+        return response()->json([
+            'status' => true,
+            'perfiles' => $array
+        ]);
     }
 
     /**
