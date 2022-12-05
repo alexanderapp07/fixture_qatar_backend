@@ -178,7 +178,7 @@ class EstadisticaController extends Controller
     public function resultados() {
         $goles_partidos = [];
 
-        for($i = 0; $i < 32; $i++) { // $i < 48
+        for($i = 0; $i < 48; $i++) { // $i < 48
             $partido = Partido::findOrFail($i + 1);
 
             $query = DB::table('partidos as a')
@@ -190,7 +190,7 @@ class EstadisticaController extends Controller
             ->select('a.fecha', 'a.hora', 'a.id', 'd.nombre as tipo', 'b.nombre as local', 'c.nombre as visita', DB::raw('count(e.pais_id) as goles'), 'f.nombre')
             ->groupBy('d.nombre', 'b.nombre', 'c.nombre', 'e.pais_id', 'a.id', 'a.fecha', 'a.hora')
             ->havingRaw('d.nombre = "GOL" and a.id = ' . $partido->id . '')
-            ->orderByRaw('a.fecha desc, a.hora desc')
+            ->orderByRaw('a.fecha asc, a.hora asc')
             ->get();
 
             if(count($query)==0) {
