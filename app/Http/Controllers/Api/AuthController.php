@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Perfil;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -44,11 +45,16 @@ class AuthController extends Controller
                 'rol_id' => 2
             ]);
 
+            $perfil = Perfil::create([
+                "usuario_id" => $user->id
+            ]);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Usuario creado exitosamente',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
-                'user' => $user
+                'user' => $user,
+                'perfil_id' => $perfil->id
             ], 200);
 
         } catch (\Throwable $th) {
@@ -89,12 +95,14 @@ class AuthController extends Controller
 
             if(Auth::attempt($request->only(['email', 'password']))) {
                 $user = User::where('email', $request->email)->first();
+                $perfil = Perfil::where('usuario_id', $user->id)->first();
 
                 return response()->json([
                     'status' => true,
                     'message' => 'Usario logeado correctamente',
                     'token' => $user->createToken("API TOKEN")->plainTextToken,
-                    'user' => $user
+                    'user' => $user,
+                    'perfil_id' => $perfil->id
                 ], 200);
             } else {
                 return response()->json([

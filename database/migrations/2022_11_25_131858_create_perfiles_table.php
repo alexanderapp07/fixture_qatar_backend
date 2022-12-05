@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             
             // Relación con la tabla paises (campeón)
-            $table->bigInteger('campeon_pais_id')->unsigned();
+            $table->bigInteger('campeon_pais_id')->unsigned()->nullable();
             $table->foreign('campeon_pais_id')->references('id')->on('paises')->onDelete('restrict');
 
             // Relación con la tabla usuarios

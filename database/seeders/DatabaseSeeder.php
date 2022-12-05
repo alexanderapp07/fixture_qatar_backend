@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             JugadorSeeder::class,
             RolSeeder::class,
             UserSeeder::class,
+            PerfilSeeder::class,
             PartidoSeeder::class,
             EstadisticaSeeder::class
         ]);
